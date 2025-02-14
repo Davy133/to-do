@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { FiUser, FiLock } from "react-icons/fi";
+import { FiUser, FiLock, FiAnchor, FiLogIn } from "react-icons/fi";
 import astronautIcon from "../assets/astronaut.svg";
+
+//TODO: Implementar aviso de erro ao tentar cadastrar usuário com senha diferente
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +20,7 @@ const Login: React.FC = () => {
         <h1 className="mb-10 font-mono font-bold text-4xl text-black-500">
           SyncNote
         </h1>
-        <h1 className="font-montserrat font-bold text-2xl text-red-500">
+        <h1 className="font-montserrat font-bold text-4xl text-red-500">
           Faça seu login
         </h1>
         <form className="mt-6">
@@ -52,7 +54,10 @@ const Login: React.FC = () => {
             Entrar
           </button>
         </form>
-        <p className="mt-2 text-gray-600 text-sm">Não tenho cadastro</p>
+        <p className="mt-2 text-gray-600 text-sm flex items-center justify-center lg:justify-start">
+          <FiLogIn className="mr-2 text-red-500" />
+          <a href="/signup" className="text-base text-grey-500">Não tenho cadastro</a>
+        </p>
       </div>
 
       <div className="hidden lg:flex w-1/2 justify-center">
