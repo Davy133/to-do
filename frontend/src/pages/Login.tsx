@@ -27,7 +27,7 @@ const Login: React.FC = () => {
             <input
               className="text-xl w-full pl-12 p-4 mb-4 border border-red-500 rounded-xl focus:outline-none"
               type="email"
-              placeholder="Usuário"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
