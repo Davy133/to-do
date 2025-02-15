@@ -1,7 +1,7 @@
 // Define the data source and generator for MongoDB
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")
+  url      = env("MONGODB_URL")
 }
 
 generator client {
