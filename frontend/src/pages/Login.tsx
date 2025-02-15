@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FiUser, FiLock, FiAnchor, FiLogIn } from "react-icons/fi";
+import { FiUser, FiLock, FiLogIn } from "react-icons/fi";
 import astronautIcon from "../assets/astronaut.svg";
 
 //TODO: Implementar aviso de erro ao tentar cadastrar usuário com senha diferente
