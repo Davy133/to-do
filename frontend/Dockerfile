@@ -1,25 +1,25 @@
-FROM node:20-alpine AS build_image
+FROM node:20-alpine AS base
+WORKDIR /app
 
-WORKDIR /app/frontend
-
-COPY package.json .
+COPY package.json package-lock.json ./
 
 RUN npm install
 
 COPY . .
 
+FROM base AS development
+EXPOSE 5173
+CMD ["npm", "run", "dev"]
+
+FROM base AS build
 RUN npm run build
 
-FROM node:20-alpine AS production_image
-WORKDIR /app/frontend
+FROM nginx:alpine AS production
+WORKDIR /usr/share/nginx/html
 
-COPY --from=build_image /app/frontend/dist ./dist
+COPY --from=build /app/dist ./
 
-EXPOSE 8080
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY package.json .
-COPY vite.config.ts .
-RUN npm install typescript
-
-EXPOSE 8080
-CMD ["npm", "run", "preview"]
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
