@@ -12,13 +12,13 @@ const taskSchema = z.object({
 const createTaskSchema = z.object({
     title: z.string().min(1),
     description: z.string().optional(),
-    dueDate: z.date()
+    dueDate: z.coerce.date()
 });
 
 const updateTaskSchema = z.object({
     title: z.string().min(1).optional(),
     description: z.string().optional(),
-    dueDate: z.date().optional(),
+    dueDate: z.coerce.date().optional(),
 });
 
 const markTaskAsCompletedSchema = z.object({

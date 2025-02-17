@@ -28,7 +28,7 @@ export const createTask = async (
       data: {
         title,
         description,
-        dueDate,
+        dueDate: new Date(dueDate),
         user: {
           connect: { id: user?.id },
         },
@@ -60,7 +60,7 @@ export const updateTask = async (
 
         const updatedTask = await prisma.task.update({
             where: { id },
-            data: { title, description, dueDate },
+            data: { title, description, dueDate: new Date(dueDate) },
         });
 
         res.status(StatusCodes.OK).json(apiResponse.success(updatedTask));
