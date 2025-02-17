@@ -1,11 +1,11 @@
-import { NextFunction, Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
-import { StatusCodes } from 'http-status-codes';
-import bcrypt from 'bcrypt';
-import { generateToken } from '../utils/token';
-import { apiResponse } from '../utils/apiResponse';
+import { NextFunction, Request, Response } from "express";
+import { PrismaClient } from "@prisma/client";
+import { StatusCodes } from "http-status-codes";
+import bcrypt from "bcrypt";
+import { generateToken } from "../utils/token";
+import { apiResponse } from "../utils/apiResponse";
 
-declare module 'express' {
+declare module "express" {
   export interface Request {
     auth?: {
       user: {
@@ -17,11 +17,17 @@ declare module 'express' {
 
 export const prisma = new PrismaClient();
 
-export const getUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const getUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     if (!req.auth?.user.id) {
-      res.status(StatusCodes.UNAUTHORIZED).json(apiResponse.fail({ message: 'Unauthorized' }));
-      return 
+      res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json(apiResponse.fail({ message: "Unauthorized" }));
+      return;
     }
 
     const user = await prisma.user.findUnique({
@@ -30,17 +36,23 @@ export const getUser = async (req: Request, res: Response, next: NextFunction): 
     });
 
     if (!user) {
-      res.status(StatusCodes.NOT_FOUND).json(apiResponse.fail({ message: 'User not found' }));
-      return 
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json(apiResponse.fail({ message: "User not found" }));
+      return;
     }
 
     res.status(StatusCodes.OK).json(apiResponse.success(user));
   } catch (error) {
-    next(error); // Passes the error to the improved error handler
+    next(error);
   }
 };
 
-export const createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const createUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { email, name, password, gender, age } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -51,28 +63,42 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
 
     res.status(StatusCodes.CREATED).json(apiResponse.success(user));
   } catch (error) {
-    next(error); // Prisma errors (like P2002) are now handled globally
+    next(error);
   }
 };
 
-export const loginUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const loginUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { email, password } = req.body;
 
     const user = await prisma.user.findUnique({
       where: { email },
-      select: { id: true, password: true, email: true, name: true, createdAt: true },
+      select: {
+        id: true,
+        password: true,
+        email: true,
+        name: true,
+        createdAt: true,
+      },
     });
 
     if (!user) {
-      res.status(StatusCodes.UNAUTHORIZED).json(apiResponse.fail({ message: 'Invalid email or password' }));
-      return 
+      res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json(apiResponse.fail({ message: "Invalid email or password" }));
+      return;
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      res.status(StatusCodes.UNAUTHORIZED).json(apiResponse.fail({ message: 'Invalid email or password' }));
-      return 
+      res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json(apiResponse.fail({ message: "Invalid email or password" }));
+      return;
     }
 
     res.status(StatusCodes.OK).json({
@@ -81,6 +107,33 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
       token: generateToken(user.id),
       createdAt: user.createdAt,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    if (!req.auth?.user.id) {
+      res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json(apiResponse.fail({ message: "Unauthorized" }));
+      return;
+    }
+
+    const { email, name, gender, age } = req.body;
+
+    const updatedUser = await prisma.user.update({
+      where: { id: req.auth.user.id },
+      data: { email, name, gender, age },
+      select: { id: true, email: true, name: true, gender: true, age: true },
+    });
+
+    res.status(StatusCodes.OK).json(apiResponse.success(updatedUser));
   } catch (error) {
     next(error);
   }
