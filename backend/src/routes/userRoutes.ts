@@ -1,18 +1,16 @@
-import { z } from "zod";
-import { NextFunction, Request, Response, Router } from "express";
-import { PrismaClient } from "@prisma/client";
+import { Router } from "express";
 import { createUserSchema, loginUserSchema } from "../schemas/userSchema";
-import { validateData } from "../middleware/validationMiddleware";
-import { getUsers, createUser, loginUser } from "../controllers/userController";
-
-const prisma = new PrismaClient();
+import { validateData } from "../middleware/validation";
+import { getUser, createUser, loginUser } from "../controllers/userController";
+import auth from "../middleware/auth";
 const userRouter: Router = Router();
+
 
 /**
  * GET /api/user
  */
 
-userRouter.get("/user", getUsers);
+userRouter.get("/user", auth.required, getUser);
 
 /**
  * POST /api/user
