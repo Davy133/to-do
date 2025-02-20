@@ -54,7 +54,15 @@ export const createUser = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { email, name, password, gender, age } = req.body;
+    const { email, name, password, confirmPassword, gender, age } = req.body;
+
+    if (password !== confirmPassword) {
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json(apiResponse.fail({ message: "Passwords do not match" }));
+      return;
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
