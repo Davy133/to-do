@@ -1,29 +1,37 @@
 import React, { useState } from "react";
 import { FiUser, FiLock, FiLogIn } from "react-icons/fi";
 import astronautIcon from "../assets/astronaut.svg";
-
-//TODO: Implementar aviso de erro ao tentar cadastrar usuário com senha diferente
+import { useNavigate } from "react-router-dom"; // For redirection after login
+import { useAuth } from "../hooks/useAuth";
 
 const Login: React.FC = () => {
+  const { login } = useAuth();
+  const navigate = useNavigate(); // Use navigate to redirect after successful login
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // Track loading state to prevent double submit
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
+    setLoading(true); // Disable the button during the login process
+    try {
+      await login(email, password);
+  
+      navigate("/");
+    } catch (error) {
+      console.error("Login failed", error);
+  
+      setLoading(false);
+    }
   };
 
   return (
     <div className="flex flex-col lg:flex-row h-screen items-center justify-center px-10">
       <div className="w-full lg:w-1/2 max-w-md text-center lg:text-left">
-        <h1 className="mb-10 font-mono font-bold text-4xl text-black-500">
-          SyncNote
-        </h1>
-        <h1 className="font-montserrat font-bold text-4xl text-red-500">
-          Faça seu login
-        </h1>
-        <form className="mt-6">
+        <h1 className="mb-10 font-mono font-bold text-4xl text-black-500">SyncNote</h1>
+        <h1 className="font-montserrat font-bold text-4xl text-red-500">Faça seu login</h1>
+        <form className="mt-6" onSubmit={handleSubmit}>
           <div className="relative">
             <FiUser className="absolute left-4 top-1/3 transform -translate-y-1/3 text-red-500 text-xl" />
             <input
@@ -32,6 +40,7 @@ const Login: React.FC = () => {
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
 
@@ -43,15 +52,16 @@ const Login: React.FC = () => {
               placeholder="Senha"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
 
           <button
             className="w-full p-4 bg-red-500 rounded-xl text-white font-bold"
             type="submit"
-            onClick={handleSubmit}
+            disabled={loading} // Disable the button while loading
           >
-            Entrar
+            {loading ? "Carregando..." : "Entrar"}
           </button>
         </form>
         <p className="mt-2 text-gray-600 text-sm flex items-center justify-center lg:justify-start">

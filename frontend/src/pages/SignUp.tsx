@@ -1,17 +1,43 @@
 import React, { useState } from "react";
-import { FiUser, FiLock } from "react-icons/fi";
+import { FiUser, FiLock, FiMail } from "react-icons/fi";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import api from "../services/api";
 
-//TODO: Implementar aviso de erro ao tentar cadastrar usuário com senha diferente
-//TODO: Implementar sistema de autenticação
+const Register: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    age: "",
+    gender: "",
+  });
 
-const Login: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: name === "age" ? Number(value) : value,
+    }));
+  };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("As senhas não coincidem!");
+      return;
+    }
+
+    try {
+      const response = await api.post("/user", formData);
+      toast.success("Cadastro realizado com sucesso!");
+      console.log(response.data);
+    } catch (error) {
+      toast.error("Erro ao realizar cadastro. Tente novamente.");
+      console.error(error);
+    }
   };
 
   return (
@@ -20,44 +46,71 @@ const Login: React.FC = () => {
         <h1 className="font-montserrat font-bold text-2xl text-red-500">
           Faça seu cadastro
         </h1>
-        <form className="mt-6">
+        <form className="mt-6" onSubmit={handleSubmit}>
+          {/* Name Field */}
           <div className="relative">
             <FiUser className="absolute left-4 top-1/3 transform -translate-y-1/3 text-red-500 text-xl" />
             <input
               className="text-xl w-full pl-12 p-4 mb-4 border border-red-500 rounded-xl focus:outline-none"
-              type="email"
+              type="text"
+              name="name"
               placeholder="Nome"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.name}
+              onChange={handleChange}
+              required
             />
           </div>
 
+          {/* Email Field */}
+          <div className="relative">
+            <FiMail className="absolute left-4 top-1/3 transform -translate-y-1/3 text-red-500 text-xl" />
+            <input
+              className="text-xl w-full pl-12 p-4 mb-4 border border-red-500 rounded-xl focus:outline-none"
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          {/* Password Field */}
           <div className="relative">
             <FiLock className="absolute left-4 top-1/3 transform -translate-y-1/3 text-red-500 text-xl" />
             <input
               className="text-xl w-full pl-12 p-4 mb-4 border border-red-500 rounded-xl focus:outline-none"
               type="password"
+              name="password"
               placeholder="Senha"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={handleChange}
+              required
             />
           </div>
 
+          {/* Confirm Password Field */}
           <div className="relative">
             <FiLock className="absolute left-4 top-1/3 transform -translate-y-1/3 text-red-500 text-xl" />
             <input
               className="text-xl w-full pl-12 p-4 mb-4 border border-red-500 rounded-xl focus:outline-none"
               type="password"
+              name="confirmPassword"
               placeholder="Confirme sua senha"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
             />
           </div>
 
+          {/* Age Field */}
           <div className="relative">
             <select
               className="text-xl w-full pl-4 p-4 mb-4 border border-red-500 text-red-500 rounded-xl focus:outline-none"
-              defaultValue=""
+              name="age"
+              value={formData.age}
+              onChange={handleChange}
+              required
             >
               <option value="" disabled>
                 Selecione sua idade
@@ -70,31 +123,38 @@ const Login: React.FC = () => {
             </select>
           </div>
 
-            <div className="relative">
-                <select
-                    className="text-xl w-full pl-4 p-4 mb-4 border border-red-500 text-red-500 rounded-xl focus:outline-none"
-                    defaultValue=""
-                >
-                    <option value="" disabled>
-                        Selecione seu gênero
-                    </option>
-                    <option value="male">Masculino</option>
-                    <option value="female">Feminino</option>
-                    <option value="other">Outro</option>
-                </select>
-            </div>
+          {/* Gender Field */}
+          <div className="relative">
+            <select
+              className="text-xl w-full pl-4 p-4 mb-4 border border-red-500 text-red-500 rounded-xl focus:outline-none"
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              required
+            >
+              <option value="" disabled>
+                Selecione seu gênero
+              </option>
+              <option value="male">Masculino</option>
+              <option value="female">Feminino</option>
+              <option value="other">Outro</option>
+            </select>
+          </div>
 
+          {/* Submit Button */}
           <button
             className="w-full p-4 bg-red-500 rounded-xl text-white font-bold"
             type="submit"
-            onClick={handleSubmit}
           >
             Cadastrar
           </button>
         </form>
       </div>
+
+      {/* Toast Notifications Container */}
+      <ToastContainer />
     </div>
   );
 };
 
-export default Login;
+export default Register;
