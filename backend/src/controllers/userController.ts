@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../client";
 import { StatusCodes } from "http-status-codes";
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/token";
@@ -14,8 +14,6 @@ declare module "express" {
     };
   }
 }
-
-export const prisma = new PrismaClient();
 
 export const getUser = async (
   req: Request,
@@ -32,7 +30,12 @@ export const getUser = async (
 
     const user = await prisma.user.findUnique({
       where: { id: req.auth.user.id },
-      select: { id: true, email: true },
+      select: { 
+        email: true,
+        name: true,
+        gender: true,
+        age: true
+      },
     });
 
     if (!user) {

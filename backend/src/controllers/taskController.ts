@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../client";
 import { StatusCodes } from "http-status-codes";
 import { apiResponse } from "../utils/apiResponse";
 
@@ -12,8 +12,6 @@ declare module "express" {
     };
   }
 }
-
-export const prisma = new PrismaClient();
 
 export const createTask = async (
   req: Request,
