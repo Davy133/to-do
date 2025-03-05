@@ -1,0 +1,127 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "TO-DO API",
+      "version": "1.0.0",
+      "description": "API for managing tasks and users."
+    },
+    "paths": {
+      "/tasks": {
+        "post": {
+          "summary": "Create a new task",
+          "description": "This route is used to create a new task.",
+          "tags": ["Tasks"],
+          "security": [{"bearerAuth": []}],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/CreateTask"}
+              }
+            }
+          },
+          "responses": {"200": {"description": "Task created successfully"}}
+        },
+        "get": {
+          "summary": "Get all tasks",
+          "description": "Retrieve all tasks.",
+          "tags": ["Tasks"],
+          "security": [{"bearerAuth": []}],
+          "responses": {"200": {"description": "List of tasks"}}
+        }
+      },
+      "/tasks/{id}": {
+        "put": {
+          "summary": "Update an existing task",
+          "tags": ["Tasks"],
+          "security": [{"bearerAuth": []}],
+          "parameters": [{"name": "id", "in": "path", "required": true}],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/UpdateTask"}
+              }
+            }
+          },
+          "responses": {"200": {"description": "Task updated successfully"}}
+        },
+        "delete": {
+          "summary": "Delete a task",
+          "tags": ["Tasks"],
+          "security": [{"bearerAuth": []}],
+          "parameters": [{"name": "id", "in": "path", "required": true}],
+          "responses": {"200": {"description": "Task deleted successfully"}}
+        }
+      },
+      "/tasks/{id}/completed": {
+        "patch": {
+          "summary": "Mark a task as completed",
+          "tags": ["Tasks"],
+          "security": [{"bearerAuth": []}],
+          "parameters": [{"name": "id", "in": "path", "required": true}],
+          "responses": {"200": {"description": "Task marked as completed"}}
+        }
+      },
+      "/api/user": {
+        "get": {
+          "summary": "Get authenticated user profile",
+          "tags": ["Users"],
+          "security": [{"bearerAuth": []}],
+          "responses": {"200": {"description": "User profile details"}}
+        },
+        "post": {
+          "summary": "Register a new user",
+          "tags": ["Users"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/CreateUser"}
+              }
+            }
+          },
+          "responses": {"201": {"description": "User created successfully"}}
+        },
+        "put": {
+          "summary": "Update user profile",
+          "tags": ["Users"],
+          "security": [{"bearerAuth": []}],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/UpdateUser"}
+              }
+            }
+          },
+          "responses": {"200": {"description": "User profile updated"}}
+        }
+      },
+      "/api/user/login": {
+        "post": {
+          "summary": "Authenticate user",
+          "tags": ["Users"],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/LoginUser"}
+              }
+            }
+          },
+          "responses": {"200": {"description": "Authentication successful"}}
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "CreateTask": {"type": "object", "properties": {"title": {"type": "string"}}},
+        "UpdateTask": {"type": "object", "properties": {"title": {"type": "string"}}},
+        "CreateUser": {"type": "object", "properties": {"name": {"type": "string"}, "email": {"type": "string"}, "password": {"type": "string"}}},
+        "LoginUser": {"type": "object", "properties": {"email": {"type": "string"}, "password": {"type": "string"}}},
+        "UpdateUser": {"type": "object", "properties": {"name": {"type": "string"}, "age": {"type": "integer"}, "profilePicture": {"type": "string"}}}
+      },
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer"
+        }
+      }
+    }
+  }
