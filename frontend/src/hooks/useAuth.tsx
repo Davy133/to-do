@@ -4,7 +4,7 @@ import api from "../services/api";
 interface AuthContextData {
   token: string | null;
   authenticated: boolean;
-  loading: boolean; // Add loading state
+  loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
 }
@@ -18,7 +18,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [authenticated, setAuthenticated] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true); // Set loading to true initially
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     console.debug("Token changed", token);
@@ -30,24 +30,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               Authorization: `Bearer ${token}`,
             },
           });
-          setAuthenticated(true);
+        api.defaults.headers.Authorization = `Bearer ${token}`;
+        setAuthenticated(true);
         } catch (error) {
-          console.error("Error fetching user data", error);
           logout();
         } finally {
-          setLoading(false); // Set loading to false when the check completes
+          setLoading(false);
         }
       };
 
       fetchUser();
     } else {
       setAuthenticated(false);
-      setLoading(false); // If no token, stop loading
+      setLoading(false);
     }
   }, [token]);
 
   const login = async (email: string, password: string) => {
-    setLoading(true); // Set loading to true during login
+    setLoading(true);
     try {
       const response = await api.post("/user/login", { email, password });
       const { token } = response.data;
@@ -55,11 +55,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setToken(token);
       setAuthenticated(true);
       api.defaults.headers.Authorization = `Bearer ${token}`;
-    } catch (error) {
-      console.error("Login failed", error);
+    } catch (error: Error | any) {
       setAuthenticated(false);
+      error.data = error.response.data.data;
+      throw error;
     } finally {
-      setLoading(false); // Stop loading after login attempt
+      setLoading(false);
     }
   };
 

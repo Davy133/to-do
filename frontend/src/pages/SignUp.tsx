@@ -31,27 +31,25 @@ const Register: React.FC = () => {
     }
 
     try {
-      const response = await api.post("/user", formData);
+      await api.post("/user", formData);
       toast.success("Cadastro realizado com sucesso!");
-      console.log(response.data);
     } catch (error) {
       toast.error("Erro ao realizar cadastro. Tente novamente.");
-      console.error(error);
     }
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen items-center justify-center px-10">
+    <div className="flex flex-col lg:flex-row h-screen items-center justify-center px-10 bg-[#2A2B2F] text-white">
       <div className="w-full lg:w-1/2 max-w-md text-center">
-        <h1 className="font-montserrat font-bold text-2xl text-red-500">
+        <h1 className="font-montserrat font-bold text-2xl text-white">
           Faça seu cadastro
         </h1>
         <form className="mt-6" onSubmit={handleSubmit}>
           {/* Name Field */}
           <div className="relative">
-            <FiUser className="absolute left-4 top-1/3 transform -translate-y-1/3 text-red-500 text-xl" />
+            <FiUser className="absolute left-4 top-1/3 transform -translate-y-1/3 text-gray-400 text-xl" />
             <input
-              className="text-xl w-full pl-12 p-4 mb-4 border border-red-500 rounded-xl focus:outline-none"
+              className="text-xl w-full pl-12 p-4 mb-4 border border-gray-700 bg-[#1C1D22] rounded-xl focus:outline-none text-white"
               type="text"
               name="name"
               placeholder="Nome"
@@ -63,9 +61,9 @@ const Register: React.FC = () => {
 
           {/* Email Field */}
           <div className="relative">
-            <FiMail className="absolute left-4 top-1/3 transform -translate-y-1/3 text-red-500 text-xl" />
+            <FiMail className="absolute left-4 top-1/3 transform -translate-y-1/3 text-gray-400 text-xl" />
             <input
-              className="text-xl w-full pl-12 p-4 mb-4 border border-red-500 rounded-xl focus:outline-none"
+              className="text-xl w-full pl-12 p-4 mb-4 border border-gray-700 bg-[#1C1D22] rounded-xl focus:outline-none text-white"
               type="email"
               name="email"
               placeholder="Email"
@@ -77,9 +75,9 @@ const Register: React.FC = () => {
 
           {/* Password Field */}
           <div className="relative">
-            <FiLock className="absolute left-4 top-1/3 transform -translate-y-1/3 text-red-500 text-xl" />
+            <FiLock className="absolute left-4 top-1/3 transform -translate-y-1/3 text-gray-400 text-xl" />
             <input
-              className="text-xl w-full pl-12 p-4 mb-4 border border-red-500 rounded-xl focus:outline-none"
+              className="text-xl w-full pl-12 p-4 mb-4 border border-gray-700 bg-[#1C1D22] rounded-xl focus:outline-none text-white"
               type="password"
               name="password"
               placeholder="Senha"
@@ -91,9 +89,9 @@ const Register: React.FC = () => {
 
           {/* Confirm Password Field */}
           <div className="relative">
-            <FiLock className="absolute left-4 top-1/3 transform -translate-y-1/3 text-red-500 text-xl" />
+            <FiLock className="absolute left-4 top-1/3 transform -translate-y-1/3 text-gray-400 text-xl" />
             <input
-              className="text-xl w-full pl-12 p-4 mb-4 border border-red-500 rounded-xl focus:outline-none"
+              className="text-xl w-full pl-12 p-4 mb-4 border border-gray-700 bg-[#1C1D22] rounded-xl focus:outline-none text-white"
               type="password"
               name="confirmPassword"
               placeholder="Confirme sua senha"
@@ -106,7 +104,7 @@ const Register: React.FC = () => {
           {/* Age Field */}
           <div className="relative">
             <select
-              className="text-xl w-full pl-4 p-4 mb-4 border border-red-500 text-red-500 rounded-xl focus:outline-none"
+              className="text-xl w-full pl-4 p-4 mb-4 border border-gray-700 bg-[#1C1D22] text-gray-400 rounded-xl focus:outline-none"
               name="age"
               value={formData.age}
               onChange={handleChange}
@@ -126,7 +124,7 @@ const Register: React.FC = () => {
           {/* Gender Field */}
           <div className="relative">
             <select
-              className="text-xl w-full pl-4 p-4 mb-4 border border-red-500 text-red-500 rounded-xl focus:outline-none"
+              className="text-xl w-full pl-4 p-4 mb-4 border border-gray-700 bg-[#1C1D22] text-gray-400 rounded-xl focus:outline-none"
               name="gender"
               value={formData.gender}
               onChange={handleChange}
@@ -143,7 +141,7 @@ const Register: React.FC = () => {
 
           {/* Submit Button */}
           <button
-            className="w-full p-4 bg-red-500 rounded-xl text-white font-bold"
+            className="w-full p-4 bg-gray-700 rounded-xl text-white font-bold"
             type="submit"
           >
             Cadastrar
