@@ -1,0 +1,42 @@
+import React, { useState, useEffect } from 'react';
+import { FaBars, FaTimes, FaBell, FaCalendar } from 'react-icons/fa';
+
+
+interface HeaderProps {
+    title: string;
+}
+
+const Header: React.FC<HeaderProps> = ({ title }) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+
+
+    const toggleMenu = () => {
+        setIsOpen(!isOpen);
+    };
+
+    return (
+        <header className="flex flex-col md:flex-row items-center justify-between mb-8 p-2">
+            <div className="hidden md:flex flex-col md:flex-row items-center">
+                <h1 className="text-2xl font-bold">{title}</h1>
+            </div>
+            <div className="md:hidden">
+                <button onClick={toggleMenu} className="text-gray-400">
+                    {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+                </button>
+            </div>
+            <div className={`flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4 ${isOpen ? 'flex' : 'hidden'} md:flex`}>
+                <button className="text-gray-400">
+                    <FaBell size={16} />
+                </button>
+                <div className="flex items-center text-gray-400">
+                    <FaCalendar size={16} />
+                    <span className="ml-2">{new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/ /g, ' ')}</span>
+                </div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png" alt="User" className="rounded-full w-8 h-8" />
+            </div>
+        </header>
+    );
+};
+
+export default Header;

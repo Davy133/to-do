@@ -16,6 +16,8 @@ export const loginUserSchema = z.object({
   password: z.string().min(8),
 });
 
+
+//TODO: FIX THIS
 export const updateUserSchema = z.object({
   name: z.string().optional(),
   age: z.number().int().optional(),

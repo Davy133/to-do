@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import { Login, SignUp, Home } from "./pages";
+import { Login, SignUp, Home, Profile } from "./pages";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components";
 
@@ -12,6 +12,9 @@ function App() {
         <Routes>
           <Route path="/" element={<ProtectedRoute />}>
             <Route index element={<Home />} />
+          </Route>
+          <Route path="/profile" element={<ProtectedRoute />}>
+            <Route index element={<Profile />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
