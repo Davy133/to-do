@@ -1,4 +1,4 @@
-import { createTask, updateTask, deleteTask, markTaskAsCompleted, getTasks } from "../../controllers/taskController";
+import { createTask, updateTask, deleteTask, flipTaskStatus, getTasks } from "../../controllers/taskController";
 import { prismaMock } from "../../singleton";
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -159,7 +159,7 @@ describe("Task Controller", () => {
                 updatedAt:  new Date("2023-10-10")
             });
 
-            await markTaskAsCompleted(req as Request, res as Response, next);
+            await flipTaskStatus(req as Request, res as Response, next);
 
             expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
             expect(res.json).toHaveBeenCalledWith(apiResponse.success({

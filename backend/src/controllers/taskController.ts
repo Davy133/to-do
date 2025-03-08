@@ -91,31 +91,31 @@ export const deleteTask = async (
     }
 };
 
-export const markTaskAsCompleted = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
+export const flipTaskStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
-    try {
-        const { id } = req.params;
-        const user = req.auth?.user;
+  try {
+    const { id } = req.params;
+    const user = req.auth?.user;
 
-        const task = await prisma.task.findUnique({ where: { id } });
+    const task = await prisma.task.findUnique({ where: { id } });
 
-        if (!task || task.userId !== user?.id) {
-            res.status(StatusCodes.FORBIDDEN).json(apiResponse.error("You are not authorized to mark this task as completed"));
-            return;
-        }
-
-        const updatedTask = await prisma.task.update({
-            where: { id },
-            data: { isCompleted: true },
-        });
-
-        res.status(StatusCodes.OK).json(apiResponse.success(updatedTask));
-    } catch (error) {
-        next(error);
+    if (!task || task.userId !== user?.id) {
+      res.status(StatusCodes.FORBIDDEN).json(apiResponse.error("You are not authorized to change the status of this task"));
+      return;
     }
+
+    const updatedTask = await prisma.task.update({
+      where: { id },
+      data: { isCompleted: !task.isCompleted },
+    });
+
+    res.status(StatusCodes.OK).json(apiResponse.success(updatedTask));
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const getTasks = async (
