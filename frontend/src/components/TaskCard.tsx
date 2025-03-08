@@ -35,7 +35,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
     <div className="bg-[#2A2C31] p-4 rounded-lg shadow-lg">
       <h3 className="text-xl font-semibold">{title}</h3>
       <p>{description}</p>
-      <p className="text-sm text-gray-400">Due: {dueDate}</p>
+      <p className="text-sm text-gray-400">Prazo: {new Date(dueDate).toLocaleDateString()}</p>
       <div className="flex justify-between items-center mt-4">
         <div className="flex space-x-2">
           <button
