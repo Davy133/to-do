@@ -20,7 +20,7 @@ const Home: React.FC = () => {
         <Sidebar.Sidebar>
           <Sidebar.SidebarItem icon={<FaHome />} link="/" />
           <Sidebar.SidebarItem icon={<FaUser />} link="/profile" />
-          <Sidebar.SidebarItem icon={<FaCog />} link="/settings" />
+          {/* <Sidebar.SidebarItem icon={<FaCog />} link="/settings" /> */}
           {/* <Sidebar.SidebarItem icon={<FaStickyNote />} link="/notes" />
           <Sidebar.SidebarItem icon={<FaFlag />} link="/tasks" />
           <Sidebar.SidebarItem icon={<FaCalendarAlt />} link="/calendar" />

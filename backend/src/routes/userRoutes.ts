@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { createUserSchema, loginUserSchema, updateUserSchema } from "../schemas/userSchema";
 import { validateData } from "../middleware/validation";
-import { getUser, createUser, loginUser, updateUser } from "../controllers/userController";
+import { getUser, createUser, loginUser, updateUser, getGravatar } from "../controllers/userController";
 import auth from "../middleware/auth";
 const userRouter: Router = Router();
 
@@ -46,5 +46,7 @@ userRouter.post("/user/login", validateData(loginUserSchema), loginUser);
  * @returns {Object} Updated user profile
  */
 userRouter.put("/user", auth.required, validateData(updateUserSchema), updateUser);
+
+userRouter.get("/user/profile", auth.required, getGravatar);
 
 export const UsersRoutes: Router = userRouter;

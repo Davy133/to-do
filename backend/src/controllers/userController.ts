@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/token";
 import { apiResponse } from "../utils/apiResponse";
-
+import axios from "axios";
 declare module "express" {
   export interface Request {
     auth?: {
@@ -30,11 +30,11 @@ export const getUser = async (
 
     const user = await prisma.user.findUnique({
       where: { id: req.auth.user.id },
-      select: { 
+      select: {
         email: true,
         name: true,
         gender: true,
-        age: true
+        age: true,
       },
     });
 
@@ -145,6 +145,50 @@ export const updateUser = async (
     });
 
     res.status(StatusCodes.OK).json(apiResponse.success(updatedUser));
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getGravatar = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    if (!req.auth?.user.id) {
+      res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json(apiResponse.fail({ message: "Unauthorized" }));
+      return;
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: req.auth.user.id },
+      select: { email: true },
+    });
+
+    if (!user) {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json(apiResponse.fail({ message: "User not found" }));
+      return;
+    }
+
+    const identifier = user.email;
+    const hash = require("crypto")
+      .createHash("sha256")
+      .update(identifier.trim().toLowerCase())
+      .digest("hex");
+    const response = await axios.get(
+      `https://api.gravatar.com/v3/profiles/${hash}`,
+      {
+        headers: {
+          "Authorization": `Bearer ${process.env.GRAVATAR_API_KEY}`,
+        },
+      }
+    );
+    res.status(StatusCodes.OK).json(apiResponse.success(response.data));
   } catch (error) {
     next(error);
   }
