@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import { FaHome, FaUser, FaPencilAlt } from "react-icons/fa";
 import api from "../services/api";
 import { useAvatar } from "../hooks/useAvatar";
+
 interface User {
   name: string;
   email: string;
@@ -14,15 +15,11 @@ interface User {
 const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState<User>({
-    name: "",
-    email: "",
-    gender: "",
-    age: 0,
-  });
+  const [formData, setFormData] = useState<User>({ name: "", email: "", gender: "", age: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const avatarUrl = useAvatar();
+
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -75,7 +72,6 @@ const Profile: React.FC = () => {
       <Sidebar.Sidebar>
         <Sidebar.SidebarItem icon={<FaHome />} link="/" />
         <Sidebar.SidebarItem icon={<FaUser />} link="/profile" />
-        {/* <Sidebar.SidebarItem icon={<FaCog />} link="/settings" /> */}
       </Sidebar.Sidebar>
 
       <div className="flex-1 p-8">
@@ -86,25 +82,25 @@ const Profile: React.FC = () => {
           <p className="text-red-500">{error}</p>
         ) : (
           user && (
-            <div className="bg-[#2A2B2F] p-6 rounded-lg shadow-md w-full max-w-lg mx-auto border border-[#3A3B3E] relative">
+            <div className="bg-[#2A2B2F] p-6 rounded-lg shadow-md w-full max-w-lg mx-auto border border-[#3A3B3E]">
               {/* Profile Picture */}
               <div className="flex flex-col items-center mb-6">
-              <a
-                href="https://gravatar.com/emails"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative"
-              >
-                <img
-                src={avatarUrl || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"}
-                alt="Profile"
-                className="w-24 h-24 rounded-full object-cover group-hover:opacity-75 transition-opacity"
-                />
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <FaPencilAlt className="text-white text-xl" />
-                </div>
-              </a>
-              <p className="text-sm text-gray-400 mt-2">{user?.name}</p>
+                <a
+                  href="https://gravatar.com/emails"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group"
+                >
+                  <img
+                    src={avatarUrl || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"}
+                    alt="Profile"
+                    className="w-24 h-24 rounded-full object-cover group-hover:opacity-75 transition-opacity"
+                  />
+                  {/* <div className="inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <FaPencilAlt className="text-white text-xl" />
+                  </div> */}
+                </a>
+                <p className="text-sm text-gray-400 mt-2">{user?.name}</p>
               </div>
 
               {/* User Form */}

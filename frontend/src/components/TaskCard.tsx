@@ -18,7 +18,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
   isCompleted: initialIsCompleted,
   onDelete,
   onComplete,
-    onEdit,
+  onEdit,
 }) => {
   const [isCompleted, setIsCompleted] = useState(initialIsCompleted);
 
@@ -27,43 +27,43 @@ const TaskCard: React.FC<TaskCardProps> = ({
     onComplete();
   };
 
-  const handleEdit = () => {
-    onEdit();
-  };
-
   return (
-    <div className="bg-[#2A2C31] p-4 rounded-lg shadow-lg">
-      <h3 className="text-xl font-semibold">{title}</h3>
-      <p>{description}</p>
-      <p className="text-sm text-gray-400">Prazo: {new Date(dueDate).toLocaleDateString()}</p>
-      <div className="flex justify-between items-center mt-4">
-        <div className="flex space-x-2">
-          <button
-            onClick={onDelete}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300"
-          >
-            Delete
-          </button>
-          <button
-            onClick={handleComplete}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
-          >
-            Complete
-          </button>
-          <button 
-          onClick={handleEdit}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300"
-          >
-            Edit
-          </button>
-        </div>
+    <div className="bg-[#1F2125] p-6 rounded-2xl shadow-lg w-full border border-gray-700 transition hover:shadow-xl">
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-bold text-white">{title}</h3>
         <span
-          className={`text-sm ${
-            isCompleted ? "text-green-500" : "text-yellow-500"
+          className={`px-3 py-1 text-xs font-semibold rounded-full ${
+            isCompleted ? "bg-green-600 text-white" : "bg-yellow-500 text-black"
           }`}
         >
           {isCompleted ? "Completed" : "Pending"}
         </span>
+      </div>
+
+      <p className="text-sm text-gray-300 mt-2">{description}</p>
+      <p className="text-sm text-gray-400 mt-3">
+        📅 Due: <span className="font-medium text-white"> {new Date(new Date(dueDate).getTime() + 4 * 60 * 60 * 1000).toLocaleDateString()}</span>
+      </p>
+
+      <div className="grid grid-cols-3 gap-3 mt-6">
+        <button
+          onClick={handleComplete}
+          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition w-full"
+        >
+          {isCompleted ? "Undo" : "Done"}
+        </button>
+        <button
+          onClick={onEdit}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition w-full"
+        >
+          Edit
+        </button>
+        <button
+          onClick={onDelete}
+          className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition w-full"
+        >
+          Delete
+        </button>
       </div>
     </div>
   );
