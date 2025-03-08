@@ -1,6 +1,7 @@
 FROM node:20-alpine AS base
 WORKDIR /app
 
+CMD [ "cd", "/backend" ]
 COPY package.json package-lock.json ./
 RUN npm install
 
