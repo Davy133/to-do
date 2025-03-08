@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Sidebar } from "../components";
 import Header from "../components/Header";
-import { FaHome, FaUser, FaPencilAlt } from "react-icons/fa";
+import { FaHome, FaUser } from "react-icons/fa";
 import api from "../services/api";
 import { useAvatar } from "../hooks/useAvatar";
 

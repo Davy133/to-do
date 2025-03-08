@@ -1,5 +1,5 @@
 import React from "react";
-import { FaBell, FaCalendar } from "react-icons/fa";
+import { FaCalendar } from "react-icons/fa";
 import { useAvatar } from "../hooks/useAvatar";
 
 interface HeaderProps {
