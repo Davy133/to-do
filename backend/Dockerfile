@@ -6,6 +6,9 @@ RUN npm install
 
 COPY . .
 
+RUN npx prisma generate
+RUN npx prisma db push
+
 FROM base AS build
 RUN npm run build
 
@@ -14,7 +17,6 @@ WORKDIR /app
 COPY --from=build /app /app
 RUN npm install --omit=dev
 
-CMD ["node", "dist/server.js"]
+EXPOSE 3000
 
-# FROM base AS development
-# CMD ["npm", "run", "dev"]
+CMD ["node", "dist/server.js"]
