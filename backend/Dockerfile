@@ -16,5 +16,5 @@ RUN npm install --omit=dev
 
 CMD ["node", "dist/server.js"]
 
-FROM base AS development
-CMD ["npm", "run", "dev"]
+# FROM base AS development
+# CMD ["npm", "run", "dev"]
