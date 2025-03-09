@@ -8,13 +8,6 @@ pnpm-debug.log
 dist
 build
 
-# Ignorar arquivos de ambiente
-.env
-.env.local
-.env.development
-.env.production
-.env.test
-
 # Ignorar arquivos do editor e do sistema
 *.swp
 *.swo
