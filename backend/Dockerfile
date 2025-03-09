@@ -7,6 +7,7 @@ RUN npm install
 COPY . .
 
 RUN npx prisma generate
+RUN echo "MONGODB_URL=$(cat /etc/secrets/MONGODB_URL)" > .env
 RUN npx prisma db push
 
 FROM base AS build
