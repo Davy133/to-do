@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import { Login, SignUp, Home, Profile } from "./pages";
+import { Login, SignUp, Home, Profile, NotFound } from "./pages";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components";
 
@@ -18,6 +18,7 @@ function App() {
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>
     </Router>

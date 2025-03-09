@@ -32,7 +32,10 @@ const Register: React.FC = () => {
 
     try {
       await api.post("/user", formData);
-      toast.success("Cadastro realizado com sucesso!");
+      toast.success("Cadastro realizado com sucesso! Redirecionando para a página de login.");
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 3000);
     } catch (error) {
       toast.error("Erro ao realizar cadastro. Tente novamente.");
     }
@@ -139,13 +142,13 @@ const Register: React.FC = () => {
             </select>
           </div>
 
-          {/* Submit Button */}
-          <button
-            className="w-full p-4 bg-gray-700 rounded-xl text-white font-bold"
+            {/* Submit Button */}
+            <button
+            className="w-full p-4 bg-gray-700 rounded-xl text-white font-bold hover:bg-gray-800 transition duration-300"
             type="submit"
-          >
+            >
             Cadastrar
-          </button>
+            </button>
         </form>
       </div>
 

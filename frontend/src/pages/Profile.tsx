@@ -100,7 +100,7 @@ const Profile: React.FC = () => {
                     <FaPencilAlt className="text-white text-xl" />
                   </div> */}
                 </a>
-                <p className="text-sm text-gray-400 mt-2">{user?.name}</p>
+                <p className="text-sm text-gray-400 mt-2 truncate w-32 sm:w-48 md:w-64 lg:w-80 xl:w-96 text-center">{user?.name}</p>
               </div>
 
               {/* User Form */}

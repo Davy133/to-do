@@ -16,15 +16,15 @@ const Login: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
-    login(email, password).then(() => {
+
+    try {
+      await login(email, password);
       navigate("/");
-    }
-    ).catch((error) => { 
+    } catch (error: any) {
       console.error("Login failed", error);
-      toast.error(error.data.message);
-      setLoading(false);
+      toast.error(error?.data?.message || "Login failed. Please try again.");
+      setLoading(false); // Ensure loading is reset on failure
     }
-    );
   };
 
   return (
@@ -45,7 +45,7 @@ const Login: React.FC = () => {
             />
           </div>
 
-            <div className="relative">
+          <div className="relative">
             <FiLock className="absolute left-4 top-1/3 transform -translate-y-1/3 text-gray-400 text-xl" />
             <input
               className="text-xl w-full pl-12 p-4 mb-4 border border-gray-700 bg-[#1C1D22] text-white rounded-xl focus:outline-none"
@@ -55,10 +55,10 @@ const Login: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            </div>
+          </div>
 
           <button
-            className="w-full p-4 bg-gray-700 rounded-xl text-white font-bold"
+            className="w-full p-4 bg-gray-700 rounded-xl text-white font-bold hover:bg-gray-800 transition duration-300 disabled:opacity-50"
             type="submit"
             disabled={loading}
           >
@@ -66,8 +66,10 @@ const Login: React.FC = () => {
           </button>
         </form>
         <p className="mt-2 text-gray-400 text-sm flex items-center justify-center lg:justify-start">
-          <FiLogIn className="mr-2 text-gray-400" />
-          <a href="/signup" className="text-base text-gray-400">Não tenho cadastro</a>
+          <a href="/signup" className="flex items-center text-base text-white hover:text-[#9e9e9e] transition duration-300">
+            <FiLogIn className="mr-2 text-gray-400" />
+            Não tenho cadastro
+          </a>
         </p>
       </div>
 
